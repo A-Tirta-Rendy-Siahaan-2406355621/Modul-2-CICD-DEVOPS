@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 @Repository
 public class ProductRepository {
     private List<Product> productData = new ArrayList<>();
@@ -19,4 +20,15 @@ public class ProductRepository {
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
+
+    public Product findById(Long id) {
+        for (Product product : productData) {
+            if (product.getProductId() == id) {
+                return product;
+            }
+        }
+        return null;
+    }
+
 }
+
