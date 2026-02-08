@@ -6,6 +6,6 @@ Saya berusaha menerapkan prinsip clean code dengan memberikan penamaan class dan
 
 Dari sisi secure coding, saya tidak menyimpan data sensitif di dalam source code. Proses input data dari user dilakukan melalui mekanisme model binding yang terstruktur, sehingga alur data lebih terkontrol. Interaksi user dengan aplikasi juga dibatasi melalui endpoint yang disediakan oleh controller untuk menghindari akses langsung ke layer lain.
 
-Pada proses pengelolaan versi menggunakan Git, saya mengembangkan fitur utama pada branch `list-product`. Setelah seluruh fitur selesai dan diuji, saya menggabungkan branch tersebut ke branch utama menggunakan fast-forward merge. Karena tidak ada perubahan baru pada branch utama, Git tidak membuat merge commit khusus dan hanya memajukan pointer branch ke commit terbaru.
+Pada proses pengelolaan versi menggunakan Git, saya mengembangkan fitur utama pada branch list-product . Setelah seluruh fitur selesai dan diuji, saya menggabungkan branch tersebut ke branch utama menggunakan fast-forward merge. Karena tidak ada perubahan baru pada branch utama, Git tidak membuat merge commit khusus dan hanya memajukan pointer branch ke commit terbaru.
 
 Secara keseluruhan, melalui exercise ini saya menjadi lebih memahami pentingnya penulisan kode yang rapi, terstruktur, dan aman sejak awal pengembangan. Ke depannya, saya masih dapat meningkatkan kualitas aplikasi dengan menambahkan validasi input, memperbaiki mekanisme dependency injection, serta menambahkan penanganan error agar aplikasi menjadi lebih robust.
