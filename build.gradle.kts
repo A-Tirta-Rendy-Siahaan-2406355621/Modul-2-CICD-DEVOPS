@@ -1,9 +1,13 @@
 plugins {
+    pmd
     java
     jacoco
     id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
 }
+
+
+
 
 
 val seleniumJavaVersion = "4.14.1"
@@ -27,6 +31,20 @@ configurations {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
+
+pmd {
+    toolVersion = "7.0.0-rc4"
+    isConsoleOutput = true
+    rulesMinimumPriority = 5
+}
+
+tasks.withType<Pmd>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
 
 repositories {
     mavenCentral()

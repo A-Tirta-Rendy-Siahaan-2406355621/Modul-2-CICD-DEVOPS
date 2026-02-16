@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
+    private static final String PRODUCT_LIST_URL = "/product/list";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -38,7 +40,7 @@ class ProductControllerTest {
                         .param("productName", "Test")
                         .param("productQuantity", "10"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl(PRODUCT_LIST_URL));
 
         verify(service).create(any(Product.class));
     }
@@ -47,11 +49,12 @@ class ProductControllerTest {
     void testProductListPage() throws Exception {
         when(service.findAll()).thenReturn(List.of(new Product()));
 
-        mockMvc.perform(get("/product/list"))
+        mockMvc.perform(get(PRODUCT_LIST_URL))
                 .andExpect(status().isOk())
                 .andExpect(view().name("productList"))
                 .andExpect(model().attributeExists("products"));
     }
+
     @Test
     void testEditProductForm() throws Exception {
         when(service.findById("1")).thenReturn(new Product());
@@ -71,7 +74,7 @@ class ProductControllerTest {
                         .param("productName", "Updated")
                         .param("productQuantity", "20"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl(PRODUCT_LIST_URL));
 
         verify(service).update(any(Product.class));
     }
@@ -80,9 +83,8 @@ class ProductControllerTest {
     void testDeleteProduct() throws Exception {
         mockMvc.perform(get("/product/delete/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl(PRODUCT_LIST_URL));
 
         verify(service).deleteById("1");
     }
-
 }
