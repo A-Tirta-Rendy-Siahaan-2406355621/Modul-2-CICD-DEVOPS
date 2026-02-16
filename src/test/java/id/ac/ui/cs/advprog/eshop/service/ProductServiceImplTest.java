@@ -1,11 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,17 +13,9 @@ class ProductServiceImplTest {
     private ProductServiceImpl productService;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         productService = new ProductServiceImpl();
-
-
-        ProductRepository repo = new ProductRepository();
-        Field repoField = ProductServiceImpl.class.getDeclaredField("productRepository");
-        repoField.setAccessible(true);
-        repoField.set(productService, repo);
     }
-
-
 
     @Test
     void testUpdateProduct_positive_idExists_shouldUpdateNameAndQuantity() {
@@ -36,13 +26,11 @@ class ProductServiceImplTest {
         p.setProductQuantity(10);
         productService.create(p);
 
-
         Product updated = new Product();
         updated.setProductId("p1");
         updated.setProductName("New Name");
         updated.setProductQuantity(99);
         productService.update(updated);
-
 
         Product result = productService.findById("p1");
         assertNotNull(result);
@@ -60,12 +48,9 @@ class ProductServiceImplTest {
         updated.setProductQuantity(1);
         productService.update(updated);
 
-
         List<Product> all = productService.findAll();
         assertTrue(all.isEmpty());
     }
-
-
 
     @Test
     void testDeleteProduct_positive_idExists_shouldRemoveProduct() {
@@ -78,9 +63,7 @@ class ProductServiceImplTest {
 
         assertNotNull(productService.findById("p1"));
 
-
         productService.deleteById("p1");
-
 
         assertNull(productService.findById("p1"));
         assertTrue(productService.findAll().isEmpty());
@@ -95,9 +78,7 @@ class ProductServiceImplTest {
         p.setProductQuantity(5);
         productService.create(p);
 
-
         productService.deleteById("does-not-exist");
-
 
         Product stillThere = productService.findById("p1");
         assertNotNull(stillThere);

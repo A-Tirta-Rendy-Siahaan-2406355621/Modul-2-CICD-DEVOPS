@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -36,16 +38,13 @@ class CreateProductFunctionalTest {
         String productName = "Sampo Selenium " + System.currentTimeMillis();
         String productQty = "12";
 
-
-        String[] createUrls = new String[] {
+        String[] createUrls = new String[]{
                 baseUrl + "/product/create",
                 baseUrl + "/create-product",
                 baseUrl + "/product/add",
                 baseUrl + "/create"
         };
         openFirstWorkingUrl(driver, createUrls);
-
-
 
         WebElement nameInput = findFirst(driver,
                 By.name("productName"),
@@ -68,7 +67,6 @@ class CreateProductFunctionalTest {
         qtyInput.clear();
         qtyInput.sendKeys(productQty);
 
-
         WebElement submitButton = findFirst(driver,
                 By.cssSelector("button[type='submit']"),
                 By.cssSelector("input[type='submit']"),
@@ -77,11 +75,10 @@ class CreateProductFunctionalTest {
         );
         submitButton.click();
 
-
         boolean foundOnCurrentPage = pageContains(driver, productName);
 
         if (!foundOnCurrentPage) {
-            String[] listUrls = new String[] {
+            String[] listUrls = new String[]{
                     baseUrl + "/product/list",
                     baseUrl + "/product",
                     baseUrl + "/products",
@@ -94,8 +91,6 @@ class CreateProductFunctionalTest {
                 "New product name should appear in product list/page source. " +
                         "If this fails, adjust create/list URL or the selectors to match your HTML.");
     }
-
-
 
     private static void openFirstWorkingUrl(ChromeDriver driver, String[] urls) {
         RuntimeException lastError = null;
@@ -114,8 +109,11 @@ class CreateProductFunctionalTest {
     private static boolean pageLooksLike404(ChromeDriver driver) {
         String src = driver.getPageSource();
         String title = "";
-        try { title = driver.getTitle(); } catch (Exception ignored) {}
-        String hay = (title + "\n" + src).toLowerCase();
+        try {
+            title = driver.getTitle();
+        } catch (Exception ignored) {
+        }
+        String hay = (title + "\n" + src).toLowerCase(Locale.ROOT);
         return hay.contains("whitelabel error page") || hay.contains("404") || hay.contains("not found");
     }
 
@@ -128,7 +126,8 @@ class CreateProductFunctionalTest {
             try {
                 WebElement el = driver.findElement(by);
                 if (el != null) return el;
-            } catch (NoSuchElementException ignored) { }
+            } catch (NoSuchElementException ignored) {
+            }
         }
         throw new NoSuchElementException("Could not find element with provided locators. Adjust selectors to match your HTML.");
     }
