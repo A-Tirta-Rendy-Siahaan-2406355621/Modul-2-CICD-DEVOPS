@@ -21,3 +21,20 @@ Setelah menulis unit test, saya merasa lebih yakin terhadap perilaku kode yang s
 Pada bagian functional test, ketika diminta membuat test baru untuk memverifikasi jumlah item di product list, menyalin ulang setup yang sama (seperti inisialisasi WebDriver, base URL, dan konfigurasi Spring Boot) ke class baru dapat membuat kode menjadi kurang bersih. Duplikasi kode ini berpotensi menurunkan kualitas kode karena menyulitkan perawatan dan meningkatkan risiko inkonsistensi jika ada perubahan di masa depan. Hal ini melanggar prinsip DRY (Don’t Repeat Yourself).
 
 Untuk meningkatkan kebersihan kode, setup bersama seperti inisialisasi base URL dan konfigurasi Selenium sebaiknya dipisahkan ke dalam base test class yang dapat diwarisi oleh semua functional test suite. Dengan begitu, setiap test class hanya fokus pada skenario pengujian masing-masing, kode menjadi lebih rapi, mudah dibaca, dan lebih mudah dirawat apabila terjadi perubahan konfigurasi di kemudian hari.
+
+
+REFLEKSI 3:
+
+1. Selama mengerjakan exercise, saya menemukan beberapa code quality issue yang terdeteksi oleh PMD dan pipeline CI.
+
+Pertama, saya memperbaiki issue AvoidDuplicateLiterals. String literal yang sama (misalnya "/product/list") muncul beberapa kali di dalam file test. Untuk memperbaikinya, saya membuat sebuah konstanta seperti private static final String PRODUCT_LIST_URL = "/product/list"; lalu mengganti semua penggunaan string yang sama dengan konstanta tersebut. Strategi ini mengurangi duplikasi kode dan meningkatkan maintainability, karena jika URL berubah, cukup diubah di satu tempat saja.
+
+Kedua, saya memperbaiki issue UseLocaleWithCaseConversions. Terdapat pemanggilan toLowerCase() atau toUpperCase() tanpa menyertakan Locale. Saya menggantinya dengan toLowerCase(Locale.ROOT) atau toUpperCase(Locale.ROOT) agar hasil konversi huruf konsisten dan tidak bergantung pada pengaturan locale sistem. Ini membuat aplikasi lebih aman dan stabil di berbagai environment.
+
+Ketiga, saya memperbaiki issue AvoidAccessibilityAlteration pada class test. Sebelumnya, saya menggunakan reflection dengan setAccessible(true) untuk meng-inject dependency ke ProductServiceImpl. Cara ini melanggar prinsip encapsulation dan dianggap tidak baik oleh static analysis tool. Untuk memperbaikinya, saya mengubah pendekatan menjadi constructor injection sehingga dependency dapat diberikan melalui constructor tanpa perlu mengubah visibility field. Strategi ini membuat kode lebih bersih, lebih testable, dan sesuai dengan praktik yang direkomendasikan dalam pengembangan aplikasi berbasis Spring.
+
+2. Menurut saya, workflow yang saya buat sudah memenuhi Continuous Integration (CI) karena setiap ada push ke branch (atau minimal ke branch utama), pipeline otomatis menjalankan build dan test suite, serta menjalankan analisis kualitas kode (PMD/CodeQL). Ini memastikan perubahan kecil yang sering di-commit langsung divalidasi secara otomatis sehingga error cepat terdeteksi sebelum merge/rilis. Selain itu, hasil test dan quality check menjadi “gate” yang membantu menjaga kualitas kode secara konsisten.
+
+Untuk Continuous Deployment (CD), implementasi saya sudah mengarah ke CD karena setelah pipeline sukses, proses build & push Docker image ke registry berjalan otomatis dan service di PaaS (Koyeb) dapat menggunakan image terbaru untuk deploy. Namun, tingkat “continuous”-nya tergantung apakah Koyeb benar-benar auto-pull image terbaru setiap ada update tag (misalnya latest) tanpa langkah manual. Jika masih butuh update tag/trigger manual di Koyeb, maka itu lebih tepat disebut Continuous Delivery (siap deploy setiap saat) daripada full Continuous Deployment (langsung deploy otomatis tanpa intervensi).
+
+
