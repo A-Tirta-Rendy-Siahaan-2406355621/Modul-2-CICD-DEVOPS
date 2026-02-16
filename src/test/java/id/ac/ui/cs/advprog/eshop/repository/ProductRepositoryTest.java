@@ -69,4 +69,36 @@ class ProductRepositoryTest {
 
         assertFalse(productIterator.hasNext());
     }
+
+
+    @Test
+    void testCreateGeneratesIdWhenIdNull() {
+        Product product = new Product();
+        product.setProductId(null);
+        product.setProductName("Produk Tanpa ID");
+        product.setProductQuantity(1);
+
+        Product created = productRepository.create(product);
+
+        assertNotNull(created.getProductId());
+        assertFalse(created.getProductId().isEmpty());
+    }
+
+    @Test
+    void testFindByIdFoundAndNotFound() {
+        Product product = new Product();
+        product.setProductId("id-1");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+
+        Product found = productRepository.findById("id-1");
+        assertNotNull(found);
+        assertEquals("id-1", found.getProductId());
+
+        Product notFound = productRepository.findById("ga-ada");
+        assertNull(notFound);
+    }
+
 }
