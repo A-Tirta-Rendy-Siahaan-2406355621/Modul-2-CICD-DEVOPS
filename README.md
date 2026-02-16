@@ -37,7 +37,7 @@ Ketiga, saya memperbaiki issue AvoidAccessibilityAlteration pada class test. Seb
 
 Untuk Continuous Deployment (CD), implementasi saya sudah mengarah ke CD karena setelah pipeline sukses, proses build & push Docker image ke registry berjalan otomatis dan service di PaaS (Koyeb) dapat menggunakan image terbaru untuk deploy. Namun, tingkat “continuous”-nya tergantung apakah Koyeb benar-benar auto-pull image terbaru setiap ada update tag (misalnya latest) tanpa langkah manual. Jika masih butuh update tag/trigger manual di Koyeb, maka itu lebih tepat disebut Continuous Delivery (siap deploy setiap saat) daripada full Continuous Deployment (langsung deploy otomatis tanpa intervensi).
 
-Link Koyeb 
+Link Koyeb : https://aesthetic-jada-a-2406355621-tirtarendysiahaan-46703dbc.koyeb.app/
 
 
 
